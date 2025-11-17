@@ -43,10 +43,13 @@ func (h *Handler) GetProducts(w http.ResponseWriter, r *http.Request) {
 
 	*/
 	var wg sync.WaitGroup
+	var mu sync.Mutex
 
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
+		mu.Lock()
+		defer mu.Unlock()
 		count1, _ := h.svc.Count()
 		count = count1
 	}()
@@ -54,12 +57,16 @@ func (h *Handler) GetProducts(w http.ResponseWriter, r *http.Request) {
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
+		mu.Lock()
+		defer mu.Unlock()
 		count1, _ := h.svc.Count()
 		count = count1
 	}()
 	wg.Add(1)
 	go func() {
 		defer wg.Done()
+		mu.Lock()
+		defer mu.Unlock()
 		count1, _ := h.svc.Count()
 		count = count1
 	}()
